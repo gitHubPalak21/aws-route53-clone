@@ -4,6 +4,14 @@ A full-stack recreation of core AWS Route 53 console workflows, built with Next.
 
 This application recreates the Route 53 user experience and resource-management workflows. **It does not provide real DNS hosting or DNS resolution**, provision AWS resources, or require AWS credentials. It is not affiliated with AWS.
 
+## Live Demo
+
+**[Open the Route 53 console](https://aws-route53-clone-ecru.vercel.app)** — the single public entry point for evaluators.
+
+Sign in with **`admin@route53.local` / `admin123`**. These are intentionally public demonstration credentials. The demo account is shared; use disposable resource names and remove your test resources when finished.
+
+The frontend runs on Vercel and sends same-origin `/api/*` requests through a server-side proxy to Railway. Hosted zones, records, and sessions persist in SQLite on an attached Railway volume. Public authentication, resource CRUD, and persistence after an actual Railway restart were verified on October 9, 2026; see the [deployment verification report](docs/task16-public-verification.md).
+
 ## Features
 
 - **Authentication:** demo sign-in, persistent HttpOnly sessions, session checking, protected routes, and sign-out.
@@ -25,10 +33,6 @@ These are actual application captures. Their resource data illustrates workflows
 | Create DNS record | [View](docs/images/task12-create-1440.jpg) |
 
 ![Route 53 dashboard](docs/images/task13-dashboard-shell-1440.jpg)
-
-## Live Demo
-
-Deployment will be configured in the deployment phase. There is no hosted demo URL yet; run the application locally using the instructions below.
 
 ## Tech Stack
 
@@ -74,7 +78,7 @@ python -m app.scripts.seed_demo_user
 python -m uvicorn app.main:app --reload
 ```
 
-The migration command creates or updates the database. Relative SQLite paths resolve under `backend/`, independent of the launch directory. Startup deliberately does not create tables, migrate, seed, or backfill historical records.
+The migration command creates or updates the database. Relative SQLite paths resolve under `backend/`, independent of the launch directory. Direct local Uvicorn startup does not create tables, migrate, seed, or backfill historical records. The separate production startup script validates configuration and storage, then runs migrations and seeding before starting Uvicorn.
 
 Seeding creates the configured demo user once. Running it again does **not** reset an existing password, display name, or inactive status. The seed creates no hosted zones.
 
@@ -128,24 +132,30 @@ Copy [backend/.env.example](backend/.env.example) and [frontend/.env.example](fr
 | `SESSION_COOKIE_NAME` | `route53_session` | Session cookie name |
 | `SESSION_TTL_HOURS` | `24` | Session and cookie lifetime |
 | `SESSION_COOKIE_SECURE` | `false` in the example | Local HTTP setting; enable with HTTPS. If omitted, defaults to true for `APP_ENV=production` |
+| `SQLITE_VOLUME_PATH` | `/data` in production | Required mounted persistent volume for the production startup script |
+| `PORT` | Provider-supplied in production | Production listener port; Railway supplies `8080` for this deployment |
 
 | Frontend variable | Default/example | Purpose |
 | --- | --- | --- |
-| `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:8000` | Public API base URL; never place secrets here. Embedded at build time for production builds |
+| `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:8000` locally; unset/empty in production | Public API base URL; production defaults to same-origin `/api/*`. Never place secrets here |
+| `API_PROXY_TARGET` | Railway HTTPS backend origin | Server-only, build-time destination for the production `/api/*` rewrite; rebuild after changing it |
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    B[Browser: Next.js + Cloudscape] -->|REST + HttpOnly cookie| R[FastAPI routers + dependencies]
+    B[Browser: Next.js + Cloudscape] -->|Same-origin REST + HttpOnly cookie| V[Vercel: Next.js /api proxy]
+    V -->|HTTPS| R[Railway: FastAPI routers + dependencies]
     R --> S[Services + Pydantic validation]
     S --> O[SQLAlchemy]
-    O --> D[(SQLite)]
+    O --> D[(SQLite: /data/route53.db on Railway volume)]
 ```
 
 Frontend routes compose feature components. A root authentication provider resolves `/api/auth/me`; a guard keeps protected content hidden until authentication succeeds. Forms share create/edit implementations and keep input on API failure. Cancellable hooks suppress obsolete responses, and tables retain search/filter/sort/page state locally. Search is debounced for 350 ms. Auth and console notifications are shared; the small hosted-zone context supplies breadcrumb names and is not a resource cache.
 
-Backend routers handle HTTP inputs, dependencies, status codes, and response models. Services own queries, ownership checks, normalization, and write transactions. One engine, session factory, declarative base, and request-scoped session dependency support the application. Failed write transactions roll back; request sessions always close. Migrations and explicit seeding run separately from startup.
+Backend routers handle HTTP inputs, dependencies, status codes, and response models. Services own queries, ownership checks, normalization, and write transactions. One engine, session factory, declarative base, and request-scoped session dependency support the application. Failed write transactions roll back; request sessions always close. Production startup runs Alembic and the idempotent demo seed before launching one Uvicorn worker. Local development can call FastAPI directly using the explicit localhost API base.
+
+The production browser receives a host-only, Secure, HttpOnly, SameSite=Lax session cookie through the Vercel proxy. Authentication tokens are not returned in JSON or stored in browser JavaScript storage. Railway retains an exact HTTPS frontend origin for credentialed CORS and trusted-Origin write protection.
 
 ### Repository Structure
 
@@ -177,7 +187,7 @@ backend/
     services/                  Auth, CRUD, system records, DNS normalization
     models/                    Four SQLAlchemy models and enums
     schemas/                   Pydantic request/response contracts
-    scripts/                   Idempotent demo-user seed
+    scripts/                   Production startup and idempotent demo-user seed
   alembic/versions/             Two incremental schema migrations
   tests/                       Isolated database and API regression tests
   requirements*.txt            Runtime and development dependencies
@@ -322,7 +332,7 @@ python -m alembic check
 
 Backend tests migrate isolated temporary SQLite databases, never the developer database. They cover authentication, owner isolation, CRUD, private/public transitions, all DNS types, normalization, search/filter/sort/pagination, system protection, cascades, uniqueness races, rollback, persistence, and migration/model parity. Node tests cover DNS validation, API behavior/error feedback, hosted-zone payloads, and safe authentication destinations without another testing framework.
 
-The final audit passed **383 backend tests**, **12 frontend tests**, lint, typecheck, build, clean pip/npm installs, fresh migrations, idempotent seeding, startup/API docs, and browser CRUD smoke checks. See [verification evidence](docs/task14-15-verification.md). Browser testing is documented manual verification, not an automated browser test suite.
+Task 16 verification passed **398 backend tests**, **15 frontend tests**, lint, typecheck, and production build. Public browser CRUD, authentication, API documentation, cookie attributes, system-record protection, and persistence after an actual Railway restart also passed; see [public deployment verification](docs/task16-public-verification.md). Earlier clean-install, migration, and engineering-audit checks are retained in the [Task 14–15 report](docs/task14-15-verification.md). Browser testing is documented manual verification, not an automated browser test suite.
 
 ## Evaluator Walkthrough
 
@@ -336,9 +346,9 @@ The final audit passed **383 backend tests**, **12 frontend tests**, lint, typec
 
 ## Limitations
 
-No real DNS resolution/delegation, AWS account/IAM integration, real VPC associations, health checks, traffic policies, Resolver, or Profiles. Only Simple routing is implemented; AWS Alias and advanced routing are unavailable. TXT handling is practical text validation rather than a BIND zone-file parser. User record names are retained when a zone is renamed and may need editing to belong to the new domain. SQLite is intended for local assignment scope.
+No real DNS resolution/delegation, AWS account/IAM integration, real VPC associations, health checks, traffic policies, Resolver, or Profiles. Only Simple routing is implemented; AWS Alias and advanced routing are unavailable. TXT handling is practical text validation rather than a BIND zone-file parser. User record names are retained when a zone is renamed and may need editing to belong to the new domain. SQLite is used for the assignment deployment with one volume-backed backend instance; horizontal scaling is not configured.
 
-A Cloudscape development warning about its internal mobile-navigation button overriding `aria-haspopup` remains. Application checks found no hydration, React-key, uncontrolled-field, or unhandled-promise warnings. The dependency advisory above also remains unresolved upstream.
+A Cloudscape development warning about its internal mobile-navigation button overriding `aria-haspopup` was observed during the earlier local audit. The public production browser checks recorded no console warnings or errors. The development dependency advisory above remains unresolved upstream.
 
 ## Future Improvements
 
@@ -346,4 +356,23 @@ Potential later work: BIND import/export, JSON export, bulk operations, dark mod
 
 ## Deployment
 
-Deployment has not been performed and is reserved for a later phase. `npm run build` validates the production frontend; `npm start` serves that build locally. A deployed installation will need an HTTPS-compatible cookie/origin configuration and persistent database storage. No provider or deployment URL has been selected.
+The live frontend is **[https://aws-route53-clone-ecru.vercel.app](https://aws-route53-clone-ecru.vercel.app)**. Both services use `gitHubPalak21/aws-route53-clone`.
+
+| Service | Production configuration |
+| --- | --- |
+| Vercel frontend | Root directory `frontend`; Next.js production build |
+| Frontend proxy | `API_PROXY_TARGET=https://aws-route53-clone-production-3fbd.up.railway.app` |
+| Browser API base | `NEXT_PUBLIC_API_BASE_URL` unset/empty; same-origin `/api/*` |
+| Railway backend | Root directory `/backend`; start command `python -m app.scripts.start_production` |
+| Backend environment | `APP_ENV=production`, `SESSION_COOKIE_SECURE=true` |
+| Trusted frontend | `FRONTEND_ORIGIN=https://aws-route53-clone-ecru.vercel.app` |
+| SQLite | `DATABASE_URL=sqlite:////data/route53.db`, `SQLITE_VOLUME_PATH=/data` |
+| Persistent storage | `aws-route53-clone-volume`, mounted at `/data` |
+| Listener and healthcheck | `0.0.0.0:$PORT` (provider-supplied `8080`); `/health` |
+| Concurrency | One Railway replica and one Uvicorn worker |
+
+Production startup validates the HTTPS/cookie configuration and the mounted writable volume, runs `alembic upgrade head`, seeds the demo user idempotently, and starts Uvicorn. It refuses to fall back to an ephemeral SQLite database. Changing `API_PROXY_TARGET` requires a new frontend build; changing Railway variables requires applying them and restarting/redeploying the service.
+
+Technical links: [Backend API](https://aws-route53-clone-production-3fbd.up.railway.app), [Swagger UI](https://aws-route53-clone-production-3fbd.up.railway.app/docs), [OpenAPI](https://aws-route53-clone-production-3fbd.up.railway.app/openapi.json), and [Health](https://aws-route53-clone-production-3fbd.up.railway.app/health). These support API inspection; evaluators should use the Vercel Live Demo for the application. `/health` is a liveness endpoint, not a database readiness probe.
+
+See [Task 16 public verification](docs/task16-public-verification.md) for startup, public workflows, actual restart persistence, security checks, and test results.

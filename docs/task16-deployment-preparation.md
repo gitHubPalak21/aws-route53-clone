@@ -1,4 +1,6 @@
-# Task 16: deployment preparation — public deployment pending
+# Task 16: historical deployment preparation
+
+**Historical record:** this document describes the earlier local preparation state, before provider access and deployment. Public deployment was subsequently completed on October 9, 2026 using a Vercel frontend and Railway backend. Use the [public deployment verification report](task16-public-verification.md) and [README deployment section](../README.md#deployment) for the current URLs, configuration, and results. The pending statements below do not describe the current deployment.
 
 Verified locally on October 9, 2026. No public service, provider volume, or public URL has been created. There is no authenticated hosting CLI, hosting token environment variable, or provider browser session available on this machine. The workspace is not a Git repository. Account/plan availability must be established before selecting and creating hosting resources.
 
