@@ -28,14 +28,16 @@ These are actual application captures. Their resource data illustrates workflows
 
 | Page | Screenshot |
 | --- | --- |
-| Sign in | [View](docs/images/login-registration-production.jpg) |
-| Create account | [View](docs/images/signup-production.jpg) |
-| Hosted zones | [View](docs/images/task13-zones-1440.jpg) |
-| Create hosted zone | [View](docs/images/task13-zone-create-1440.jpg) |
-| Hosted zone and records | [View](docs/images/task13-zone-detail-1440.jpg) |
-| Create DNS record | [View](docs/images/task12-create-1440.jpg) |
+| Sign in | [View](docs/images/fidelity/after-login-1440.jpg) |
+| Create account | [View](docs/images/fidelity/after-signup-1440.jpg) |
+| Hosted zones | [View](docs/images/fidelity/after-zones-1440.jpg) |
+| Create hosted zone | [View](docs/images/fidelity/after-zone-create-1440.jpg) |
+| Hosted zone and records | [View](docs/images/fidelity/after-zone-detail-1440.jpg) |
+| Create DNS record | [View](docs/images/fidelity/after-record-create-1440.jpg) |
 
-![Route 53 dashboard](docs/images/task13-dashboard-shell-1440.jpg)
+![Route 53 dashboard](docs/images/fidelity/after-dashboard-1440.jpg)
+
+The [final UI fidelity verification](docs/ui-fidelity-verification.md) includes before/after captures of all 13 major pages at three desktop viewports, regression results, public deployment checks, and documented differences from AWS.
 
 ## Tech Stack
 

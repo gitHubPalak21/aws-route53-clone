@@ -1,0 +1,269 @@
+[
+  {
+    "page": "dashboard",
+    "contentWidth": 1440,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "zones",
+    "contentWidth": 1425,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "zone-create",
+    "contentWidth": 1440,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "zone-detail",
+    "contentWidth": 1425,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "zone-edit",
+    "contentWidth": 1440,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "record-create",
+    "contentWidth": 1440,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "record-edit",
+    "contentWidth": 1440,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "health-checks",
+    "contentWidth": 1440,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "traffic-policies",
+    "contentWidth": 1440,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "resolver",
+    "contentWidth": 1440,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "profiles",
+    "contentWidth": 1440,
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "dashboard",
+    "contentWidth": 1351,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "zones",
+    "contentWidth": 1351,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "zone-create",
+    "contentWidth": 1366,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "zone-detail",
+    "contentWidth": 1351,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "zone-edit",
+    "contentWidth": 1366,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "record-create",
+    "contentWidth": 1351,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "record-edit",
+    "contentWidth": 1351,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "health-checks",
+    "contentWidth": 1366,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "traffic-policies",
+    "contentWidth": 1366,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "resolver",
+    "contentWidth": 1366,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "profiles",
+    "contentWidth": 1366,
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "dashboard",
+    "contentWidth": 1265,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "zones",
+    "contentWidth": 1265,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "zone-create",
+    "contentWidth": 1280,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "zone-detail",
+    "contentWidth": 1265,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "zone-edit",
+    "contentWidth": 1280,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "record-create",
+    "contentWidth": 1265,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "record-edit",
+    "contentWidth": 1265,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "health-checks",
+    "contentWidth": 1280,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "traffic-policies",
+    "contentWidth": 1280,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "resolver",
+    "contentWidth": 1280,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "profiles",
+    "contentWidth": 1280,
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "login",
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "signup",
+    "height": 900,
+    "overflow": false,
+    "width": 1440
+  },
+  {
+    "page": "login",
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "signup",
+    "height": 768,
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "page": "login",
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  },
+  {
+    "page": "signup",
+    "height": 720,
+    "overflow": false,
+    "width": 1280
+  }
+]
