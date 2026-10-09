@@ -12,7 +12,7 @@ export const ROUTE53_PAGES = {
     href: "/route53",
     title: "Route 53",
     navigationLabel: "Dashboard",
-    description: "Manage hosted zones and DNS records in this Route 53 clone.",
+    description: "Manage hosted zones and DNS records for your domains.",
   },
   hostedZones: {
     href: "/route53/hosted-zones",
@@ -24,25 +24,25 @@ export const ROUTE53_PAGES = {
     href: "/route53/health-checks",
     title: "Health checks",
     navigationLabel: "Health checks",
-    description: "Health check management is not implemented in this demonstration.",
+    description: "Health check management is not included in this demonstration.",
   },
   trafficPolicies: {
     href: "/route53/traffic-policies",
     title: "Traffic policies",
     navigationLabel: "Traffic policies",
-    description: "Traffic policy management is not implemented in this demonstration.",
+    description: "Traffic policy management is not included in this demonstration.",
   },
   resolver: {
     href: "/route53/resolver",
     title: "Resolver",
     navigationLabel: "Resolver",
-    description: "Resolver functionality is not implemented in this demonstration.",
+    description: "Resolver functionality is not included in this demonstration.",
   },
   profiles: {
     href: "/route53/profiles",
     title: "Profiles",
     navigationLabel: "Profiles",
-    description: "Profiles functionality is not implemented in this demonstration.",
+    description: "Profiles functionality is not included in this demonstration.",
   },
 } as const satisfies Record<string, Route53PageDefinition>;
 

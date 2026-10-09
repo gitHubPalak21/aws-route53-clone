@@ -31,7 +31,7 @@ export function DeleteDNSRecordModal({ record, onDismiss, onDeleted }: {
     try {
       await deleteDNSRecord(record.hosted_zone_id, record.id);
       deleted = true;
-      if (mounted.current) { success(`Record ${record.name} was deleted successfully.`); onDeleted(); }
+      if (mounted.current) { success(`Record ${record.name} deleted.`); onDeleted(); }
     } catch (failure: unknown) {
       if (!mounted.current) return;
       if (failure instanceof ApiError && failure.status === 401) { void refreshUser(); return; }

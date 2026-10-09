@@ -17,7 +17,7 @@ The frontend runs on Vercel and sends same-origin `/api/*` requests through a se
 ## Features
 
 - **Authentication:** account registration, login, logout, persistent HttpOnly sessions, session checking, protected routes, and user ownership isolation.
-- **Hosted zones:** public/private CRUD, search, type filtering, sorting, pagination, AWS-style IDs, detail pages, and automatic mock NS/SOA records.
+- **Hosted zones:** public/private CRUD, search, type filtering, sorting, pagination, AWS-style IDs, detail pages, and automatic mock NS/SOA records. Public/private type is immutable after creation, matching Route 53; create a separate zone to use another type.
 - **DNS records:** CRUD, multiple values, search, type filtering, sorting, pagination, and protected system records. User types: **A, AAAA, CNAME, TXT, MX, NS, PTR, SRV, CAA**. SOA is system-generated only.
 - **Console:** dashboard with a real owner-scoped hosted-zone total, functional resource links, shared navigation and breadcrumbs, validation feedback, confirmation modals, and Flashbar success notifications.
 - **Intentionally unavailable sections:** Health checks, Traffic policies, Resolver, and Profiles have complete navigation and explanatory pages, as permitted by the assignment.
@@ -334,7 +334,7 @@ python -m pip check
 python -m alembic check
 ```
 
-Backend tests migrate isolated temporary SQLite databases, never the developer database. They cover authentication, owner isolation, CRUD, private/public transitions, all DNS types, normalization, search/filter/sort/pagination, system protection, cascades, uniqueness races, rollback, persistence, and migration/model parity. Node tests cover DNS validation, API behavior/error feedback, hosted-zone payloads, and safe authentication destinations without another testing framework.
+Backend tests migrate isolated temporary SQLite databases, never the developer database. They cover authentication, owner isolation, CRUD, public/private type immutability, private-zone metadata updates, all DNS types, normalization, search/filter/sort/pagination, system protection, cascades, uniqueness races, rollback, persistence, and migration/model parity. Node tests cover DNS validation, API behavior/error feedback, hosted-zone payloads, and safe authentication destinations without another testing framework.
 
 The account-registration enhancement passed **419 backend tests**, **20 frontend tests**, lint, typecheck, build, and Alembic parity checks. Public signup, automatic login, refresh, logout/re-login, new-user resource creation, demo login, and two-user isolation passed; see [registration verification](docs/registration-verification.md).
 

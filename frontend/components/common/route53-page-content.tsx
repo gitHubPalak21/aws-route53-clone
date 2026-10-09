@@ -19,7 +19,7 @@ export function Route53PageContent({ page }: { page: Route53PageDefinition }) {
     >
       <Container header={<Header variant="h2">About {page.title.toLowerCase()}</Header>}>
         <SpaceBetween size="m">
-          <StatusIndicator type="not-started">Not implemented</StatusIndicator>
+          <StatusIndicator type="not-started">Outside demonstration scope</StatusIndicator>
           <Box>{page.description}</Box>
           <Box color="text-body-secondary">This demonstration focuses on hosted zones and DNS records.</Box>
         </SpaceBetween>

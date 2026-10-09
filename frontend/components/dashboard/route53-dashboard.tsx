@@ -52,7 +52,7 @@ export function Route53Dashboard() {
       <ColumnLayout columns={2}>
         {services.map(({ page, title }) => <Container key={page.href} header={<Header variant="h2">{title}</Header>}>
           <SpaceBetween size="m">
-            <StatusIndicator type="not-started">Not implemented</StatusIndicator>
+            <StatusIndicator type="not-started">Outside demonstration scope</StatusIndicator>
             <Box>{page.description}</Box>
             <Link href={page.href} onFollow={(event) => { event.preventDefault(); router.push(page.href); }}>Open {page.title.toLowerCase()}</Link>
           </SpaceBetween>

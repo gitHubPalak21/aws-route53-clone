@@ -68,12 +68,12 @@ class HostedZoneCreate(BaseModel):
 
 class HostedZoneUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid", json_schema_extra={"examples": [
-        {"comment": "Updated description"}, {"zone_type": "PUBLIC"},
+        {"comment": "Updated description"},
     ]})
 
     name: DomainName | None = None
     comment: Comment | None = None
-    zone_type: ZoneType | None = None
+    zone_type: ZoneType | None = Field(default=None, description="Immutable after creation. Only the current type is accepted.")
     vpc_id: VPCId | None = None
     region: Region | None = None
 

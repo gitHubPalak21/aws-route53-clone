@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { colorBackgroundLayoutMain, spaceStaticXs, spaceStaticS, spaceStaticM, spaceStaticL, spaceStaticXl, spaceStaticXxl } from "@cloudscape-design/design-tokens";
 import { AuthProvider } from "@/components/auth/auth-provider";
 import "@cloudscape-design/global-styles/index.css";
 import "./globals.css";
@@ -12,7 +13,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body><AuthProvider>{children}</AuthProvider></body>
+      <body style={{
+        "--console-background": colorBackgroundLayoutMain,
+        "--console-space-xs": spaceStaticXs,
+        "--console-space-s": spaceStaticS,
+        "--console-space-m": spaceStaticM,
+        "--console-space-l": spaceStaticL,
+        "--console-space-xl": spaceStaticXl,
+        "--console-space-xxl": spaceStaticXxl,
+      } as CSSProperties}><AuthProvider>{children}</AuthProvider></body>
     </html>
   );
 }

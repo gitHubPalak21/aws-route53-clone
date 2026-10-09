@@ -122,23 +122,33 @@ def test_duplicate_zone_names_have_separate_record_ids_and_values_lists(db: Sess
     assert all(record.hosted_zone_id == second.id for record in b)
 
 
-def test_updates_and_type_transitions_never_generate_more_records(db: Session, owner: User, monkeypatch: pytest.MonkeyPatch) -> None:
-    zone = zones.create_hosted_zone(db, owner.id, HostedZoneCreate(name="example.com"))
+@pytest.mark.parametrize("zone_type", [ZoneType.PUBLIC, ZoneType.PRIVATE])
+def test_updates_never_generate_more_records(db: Session, owner: User, monkeypatch: pytest.MonkeyPatch, zone_type: ZoneType) -> None:
+    private = {"region": "ap-south-1", "vpc_id": "vpc-0123456789abcdef"} if zone_type == ZoneType.PRIVATE else {}
+    zone = zones.create_hosted_zone(db, owner.id, HostedZoneCreate(name="example.com", zone_type=zone_type, **private))
     original = snapshot(db, zone.id)
 
     def unexpected_factory(_zone):
         raise AssertionError("Updates must not create system records")
 
     monkeypatch.setattr(zones, "add_default_system_records", unexpected_factory)
-    for payload in [
+    updates = [
         HostedZoneUpdate(comment="Changed"),
-        HostedZoneUpdate(zone_type=ZoneType.PRIVATE, region="ap-south-1", vpc_id="vpc-0123456789abcdef"),
-        HostedZoneUpdate(region="us-east-1", vpc_id="vpc-12345678"),
-        HostedZoneUpdate(zone_type=ZoneType.PUBLIC),
+        HostedZoneUpdate(zone_type=zone_type),
         HostedZoneUpdate(name="EXAMPLE.COM."),
-    ]:
+    ]
+    if zone_type == ZoneType.PRIVATE:
+        updates.append(HostedZoneUpdate(region="us-east-1", vpc_id="vpc-12345678"))
+    for payload in updates:
         assert zones.update_hosted_zone(db, owner.id, zone.id, payload).record_count == 2
         assert snapshot(db, zone.id) == original
+
+    current = zones.get_hosted_zone(db, owner.id, zone.id)
+    opposite = ZoneType.PRIVATE if zone_type == ZoneType.PUBLIC else ZoneType.PUBLIC
+    with pytest.raises(zones.HostedZoneTypeImmutable):
+        zones.update_hosted_zone(db, owner.id, zone.id, HostedZoneUpdate(zone_type=opposite))
+    assert zones.get_hosted_zone(db, owner.id, zone.id) == current
+    assert snapshot(db, zone.id) == original
 
 
 def test_rename_only_updates_system_apex_names_and_preserves_dns_data(db: Session, owner: User) -> None:

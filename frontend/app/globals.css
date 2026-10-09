@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background: #f2f3f3;
+  background: var(--console-background);
 }
 
 .console-header {
@@ -13,7 +13,7 @@ body {
 .console-search {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--console-space-m);
   width: 100%;
 }
 
@@ -25,47 +25,22 @@ body {
 
 /* Only authentication composition; Cloudscape owns controls and focus styles. */
 .auth-status {
-  font-family: "Open Sans", "Helvetica Neue", Arial, sans-serif;
   max-width: 520px;
   margin: 96px auto;
-  padding: 0 24px;
+  padding: 0 var(--console-space-xl);
 }
 
 .login-page {
   min-height: 100vh;
 }
 
-.login-header {
-  font-family: "Open Sans", "Helvetica Neue", Arial, sans-serif;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  min-height: 56px;
-  padding: 0 32px;
-  background: #0f1b2a;
-  color: #ffffff;
-}
-
-.login-brand {
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -1px;
-}
-
-.login-product {
-  border-left: 1px solid #5f6b7a;
-  padding-left: 20px;
-  font-size: 14px;
-}
-
 .login-main {
   max-width: 432px;
   margin: 72px auto;
-  padding: 0 24px;
+  padding: 0 var(--console-space-xl);
 }
 
 @media (max-width: 480px) {
-  .login-header { padding: 0 24px; }
   .login-main { margin-top: 40px; }
   .auth-status { margin-top: 64px; }
 }

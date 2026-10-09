@@ -23,7 +23,7 @@ export function DNSRecordEditor({ zoneId, recordId }: { zoneId: string; recordId
   const detail = useDNSRecord(zoneId, recordId);
   const title = recordId ? "Edit record" : "Create record";
   function saved(record: DNSRecord) {
-    success(`Record ${record.name} was ${recordId ? "updated" : "created"} successfully.`);
+    success(`Record ${record.name} ${recordId ? "updated" : "created"}.`);
     router.push(hostedZonePath(zoneId));
   }
   if (!zone) return <HostedZoneResourceState loading={loading} missing={error === "missing"} onRetry={refetch} />;

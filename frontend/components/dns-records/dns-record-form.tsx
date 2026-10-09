@@ -79,7 +79,7 @@ export function DNSRecordForm({ mode, hostedZone, initialRecord, onSubmit, onSuc
   }
 
   return <ContentLayout disableOverlap header={<Header variant="h1">{creating ? "Create record" : "Edit record"}</Header>}>
-    <div className={styles.form}><form onSubmit={submit} noValidate>
+    <form onSubmit={submit} noValidate>
       <Form actions={<SpaceBetween direction="horizontal" size="xs">
         <Button formAction="none" variant="link" disabled={submitting} onClick={() => router.push(hostedZonePath(hostedZone.id))}>Cancel</Button>
         <Button variant="primary" formAction="submit" loading={submitting} loadingText={creating ? "Creating record" : "Saving record"}>
@@ -115,10 +115,13 @@ export function DNSRecordForm({ mode, hostedZone, initialRecord, onSubmit, onSuc
               <div className={styles.ttl}><Input controlId="record-ttl" value={values.ttl} inputMode="numeric" ariaRequired readOnly={submitting}
                 onChange={({ detail }) => { setValues((previous) => ({ ...previous, ttl: detail.value })); setErrors((previous) => ({ ...previous, ttl: undefined })); setFailure(null); }} /></div>
             </FormField>
-            <FormField label="Routing policy"><Box>Simple</Box></FormField>
+            <FormField label="Routing policy" controlId="record-routing-policy">
+              <Select controlId="record-routing-policy" readOnly selectedOption={{ label: "Simple", value: "SIMPLE" }}
+                options={[{ label: "Simple", value: "SIMPLE" }]} />
+            </FormField>
           </SpaceBetween></Container>
         </SpaceBetween>
       </Form>
-    </form></div>
+    </form>
   </ContentLayout>;
 }

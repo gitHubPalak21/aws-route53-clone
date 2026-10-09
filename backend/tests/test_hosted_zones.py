@@ -318,21 +318,40 @@ async def test_detail_patch_preserve_identity_and_timestamp(client: httpx.AsyncC
     assert db.scalar(select(func.count()).select_from(HostedZone)) == 1
 
 
-async def test_private_public_transitions_and_partial_metadata(client: httpx.AsyncClient) -> None:
-    zone = await create(client)
+@pytest.mark.parametrize("initial_type", ["PUBLIC", "PRIVATE"])
+@pytest.mark.parametrize("include_metadata", [False, True])
+async def test_zone_type_is_immutable_and_rejection_is_atomic(
+    client: httpx.AsyncClient, db: DBSession, initial_type: str, include_metadata: bool,
+) -> None:
+    zone = await create(client, **(PRIVATE if initial_type == "PRIVATE" else {}))
     path = BASE + "/" + zone["id"]
-    assert (await client.patch(path, json={"zone_type": "PRIVATE"})).status_code == 422
+    before = [(row.id, row.name, list(row.values), row.updated_at)
+              for row in db.scalars(select(DNSRecord).where(DNSRecord.hosted_zone_id == zone["id"]).order_by(DNSRecord.id))]
+    payload = {"zone_type": "PRIVATE" if initial_type == "PUBLIC" else "PUBLIC", "comment": "Must not save", "name": "changed.example.com"}
+    if include_metadata:
+        payload.update(vpc_id=PRIVATE["vpc_id"], region=PRIVATE["region"])
+    rejected = await client.patch(path, json=payload)
+    assert rejected.status_code == 409
+    assert "type cannot be changed" in rejected.json()["detail"]
+    assert rejected.headers["cache-control"] == "no-store"
     assert (await client.get(path)).json() == zone
-    private = await client.patch(path, json=PRIVATE)
-    assert private.status_code == 200 and private.json()["zone_type"] == "PRIVATE"
+    db.expire_all()
+    assert [(row.id, row.name, list(row.values), row.updated_at)
+            for row in db.scalars(select(DNSRecord).where(DNSRecord.hosted_zone_id == zone["id"]).order_by(DNSRecord.id))] == before
+    # Existing clients may still include an unchanged type with an ordinary edit.
+    updated = await client.patch(path, json={"zone_type": initial_type, "comment": "Saved"})
+    assert updated.status_code == 200 and updated.json()["zone_type"] == initial_type
+    assert updated.json()["comment"] == "Saved" and updated.json()["record_count"] == 2
+
+
+async def test_private_partial_metadata_remains_editable(client: httpx.AsyncClient) -> None:
+    zone = await create(client, **PRIVATE)
+    path = BASE + "/" + zone["id"]
     partial = await client.patch(path, json={"region": "us-east-1", "comment": "Internal"})
     assert partial.status_code == 200 and partial.json()["vpc_id"] == PRIVATE["vpc_id"]
     invalid = await client.patch(path, json={"vpc_id": None})
     assert invalid.status_code == 422
     assert (await client.get(path)).json() == partial.json()
-    assert (await client.patch(path, json={"zone_type": "PUBLIC", "region": "us-east-1"})).status_code == 422
-    public = await client.patch(path, json={"zone_type": "PUBLIC"})
-    assert public.status_code == 200 and public.json()["vpc_id"] is None and public.json()["region"] is None
 
 
 @pytest.mark.parametrize("payload", [{}, {"name": None}, {"zone_type": None}, {"name": "bad..com"},

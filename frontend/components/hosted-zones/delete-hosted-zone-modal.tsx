@@ -32,7 +32,7 @@ export function DeleteHostedZoneModal({ zone, onDismiss, onDeleted }: {
       await deleteHostedZone(zone.id);
       deleted = true;
       if (mounted.current) {
-        success(`Hosted zone ${zone.name} was deleted successfully.`);
+        success(`Hosted zone ${zone.name} deleted.`);
         onDeleted();
       }
     } catch (failure: unknown) {

@@ -1,6 +1,7 @@
 "use client";
 
 import Alert from "@cloudscape-design/components/alert";
+import Box from "@cloudscape-design/components/box";
 import Button from "@cloudscape-design/components/button";
 import Container from "@cloudscape-design/components/container";
 import ContentLayout from "@cloudscape-design/components/content-layout";
@@ -20,7 +21,6 @@ import { validationFeedback } from "@/lib/api/validation-errors";
 import { HOSTED_ZONE_REGIONS } from "@/lib/constants/regions";
 import { formValues, validateZoneForm, zonePayload, type HostedZoneFormErrors, type HostedZoneFormValues } from "@/lib/hosted-zones/form-values";
 import type { HostedZone, HostedZoneWrite } from "@/types/hosted-zone";
-import styles from "./hosted-zones.module.css";
 
 interface Props {
   mode: "create" | "edit";
@@ -76,6 +76,7 @@ export function HostedZoneForm({ mode, initialZone, cancelHref, onSubmit, onSucc
       setErrors(mapped);
       setFailure(feedback.messages.length ? feedback.messages.join(" ") : error instanceof ApiError && error.status === 404
         ? "The hosted zone no longer exists or you don't have access to it."
+        : error instanceof ApiError && error.status === 409 ? error.message
         : "The request could not be completed. Your entries have been kept. Try again.");
     } finally {
       // Keep successful submissions locked until navigation unmounts the form.
@@ -88,7 +89,6 @@ export function HostedZoneForm({ mode, initialZone, cancelHref, onSubmit, onSucc
 
   return (
     <ContentLayout disableOverlap header={<Header variant="h1">{creating ? "Create hosted zone" : "Edit hosted zone"}</Header>}>
-      <div className={styles.form}>
         <form onSubmit={submit} noValidate>
           <Form actions={<SpaceBetween direction="horizontal" size="xs">
             <Button formAction="none" variant="link" disabled={submitting} onClick={() => router.push(cancelHref)}>Cancel</Button>
@@ -108,15 +108,16 @@ export function HostedZoneForm({ mode, initialZone, cancelHref, onSubmit, onSucc
                     <Textarea controlId="zone-comment" value={values.comment} onChange={({ detail }) => change("comment", detail.value)}
                       rows={3} resize="vertical" readOnly={submitting} />
                   </FormField>
-                  <FormField label="Type" errorText={errors.zone_type}>
-                    <RadioGroup value={values.zone_type} readOnly={submitting} items={[
+                  <FormField label="Type" errorText={errors.zone_type}
+                    description={creating ? undefined : "Hosted zone type cannot be changed after creation."}>
+                    {creating ? <RadioGroup value={values.zone_type} readOnly={submitting} items={[
                       { value: "PUBLIC", label: "Public hosted zone", description: "Routes traffic on the internet." },
                       { value: "PRIVATE", label: "Private hosted zone", description: "Routes traffic within a VPC." },
                     ]} onChange={({ detail }) => {
                       if (detail.value !== "PUBLIC" && detail.value !== "PRIVATE") return;
                       setValues((previous) => ({ ...previous, zone_type: detail.value === "PRIVATE" ? "PRIVATE" : "PUBLIC", region: "", vpc_id: "" }));
                       setErrors({}); setFailure(null);
-                    }} />
+                    }} /> : <Box>{values.zone_type === "PRIVATE" ? "Private hosted zone" : "Public hosted zone"}</Box>}
                   </FormField>
                 </SpaceBetween>
               </Container>
@@ -137,7 +138,6 @@ export function HostedZoneForm({ mode, initialZone, cancelHref, onSubmit, onSucc
             </SpaceBetween>
           </Form>
         </form>
-      </div>
     </ContentLayout>
   );
 }

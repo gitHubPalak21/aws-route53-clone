@@ -85,7 +85,7 @@ export function DNSRecordsTable({ zoneId, zoneRecordCount, onZoneMissing, onCoun
         description={selected?.is_system ? "The selected record is system managed and read-only." : undefined}
         actions={<SpaceBetween direction="horizontal" size="xs">
           <Button iconName="refresh" ariaLabel="Refresh records" loading={isLoading} loadingText="Refreshing records"
-            onClick={() => { setSelectedId(null); refetch(); }}>Refresh</Button>
+            onClick={() => { setSelectedId(null); refetch(); }} />
           <Button disabled={!mutableSelection} onClick={() => { if (selected && !selected.is_system) router.push(editRecordPath(zoneId, selected.id)); }}>Edit record</Button>
           <Button disabled={!mutableSelection} onClick={() => { if (selected && !selected.is_system) setDeletingRecord(selected); }}>Delete record</Button>
           <Button variant="primary" href={createRecordPath(zoneId)} onFollow={(event) => { event.preventDefault(); router.push(createRecordPath(zoneId)); }}>Create record</Button>

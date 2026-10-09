@@ -1,7 +1,7 @@
 .toolbar {
   display: grid;
   grid-template-columns: minmax(180px, 1fr) 176px;
-  gap: 12px;
+  gap: var(--console-space-s);
   align-items: start;
   min-width: 0;
 }
@@ -16,11 +16,6 @@
 
 .zoneId {
   overflow-wrap: anywhere;
-}
-
-.form {
-  max-width: 800px;
-  width: 100%;
 }
 
 @media (max-width: 600px) {

@@ -3,7 +3,6 @@
 import Alert from "@cloudscape-design/components/alert";
 import Box from "@cloudscape-design/components/box";
 import Button from "@cloudscape-design/components/button";
-import ContentLayout from "@cloudscape-design/components/content-layout";
 import Header from "@cloudscape-design/components/header";
 import Link from "@cloudscape-design/components/link";
 import Pagination from "@cloudscape-design/components/pagination";
@@ -75,9 +74,11 @@ export function HostedZonesTable() {
   const sortingColumn = columns.find((column) => column.sortingField === query.sort_by);
 
   return (
-    <ContentLayout disableOverlap>
+    <>
       <Table<HostedZone>
         variant="full-page"
+        contentDensity="compact"
+        stickyHeader
         trackBy="id"
         items={items}
         columnDefinitions={columns}
@@ -105,7 +106,7 @@ export function HostedZonesTable() {
             actions={
               <SpaceBetween direction="horizontal" size="xs">
                 <Button iconName="refresh" ariaLabel="Refresh hosted zones" loading={isLoading}
-                  loadingText="Refreshing hosted zones" onClick={() => { setSelectedId(null); refetch(); }}>Refresh</Button>
+                  loadingText="Refreshing hosted zones" onClick={() => { setSelectedId(null); refetch(); }} />
                 <Button disabled={!selected} onClick={() => { if (selected) router.push(`${hostedZonePath(selected.id)}/edit`); }}>Edit</Button>
                 <Button disabled={!selected} onClick={() => { if (selected) setDeleteTarget(selected); }}>Delete</Button>
                 <Button variant="primary" href={CREATE_ZONE_PATH} onFollow={(event) => {
@@ -146,6 +147,6 @@ export function HostedZonesTable() {
         if (data?.items.length === 1 && data.page > 1) changeQuery({ page: data.page - 1 });
         else refetch();
       }} />}
-    </ContentLayout>
+    </>
   );
 }

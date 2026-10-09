@@ -59,13 +59,16 @@ def get_zone(zone_id: ZoneID, user: CurrentUser, db: Database) -> HostedZoneResp
 
 
 @router.patch("/{zone_id}", response_model=HostedZoneResponse, responses={**not_found, **write_errors,
-              409: {"model": AuthErrorResponse, "description": "Rename conflicts with an existing NS/SOA record set"}},
+              409: {"model": AuthErrorResponse, "description": "Hosted zone type is immutable, or rename conflicts with an NS/SOA record set"}},
               dependencies=[Depends(require_trusted_origin)], summary="Update and validate the resulting hosted zone")
 def update_zone(zone_id: ZoneID, payload: HostedZoneUpdate, user: CurrentUser, db: Database) -> HostedZoneResponse:
     try:
         return service.update_hosted_zone(db, user.id, zone_id, payload)
     except service.HostedZoneNotFound:
         raise missing_zone() from None
+    except service.HostedZoneTypeImmutable:
+        raise HTTPException(409, "Hosted zone type cannot be changed. Create a new hosted zone with the required type.",
+                            headers={"Cache-Control": "no-store"}) from None
     except service.HostedZoneRecordConflict:
         raise HTTPException(409, "Hosted zone rename conflicts with an existing NS/SOA record set",
                             headers={"Cache-Control": "no-store"}) from None

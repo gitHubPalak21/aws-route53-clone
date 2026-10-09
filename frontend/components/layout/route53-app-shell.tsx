@@ -15,15 +15,19 @@ export function Route53AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const page = getRoute53Page(pathname);
   const layoutRef = useRef<AppLayoutProps.Ref>(null);
+  const contentType: AppLayoutProps.ContentType = /\/(create|edit)$/.test(pathname)
+    ? "form" : pathname === "/route53/hosted-zones" ? "table"
+    : pathname === "/route53" ? "dashboard" : "default";
 
   return (
     <>
       <AwsTopNavigation />
       <AppLayout
+        key={contentType}
         ref={layoutRef}
         headerSelector="#console-header"
-        contentType="default"
-        navigationWidth={280}
+        contentType={contentType}
+        maxContentWidth={contentType === "form" ? 800 : undefined}
         toolsHide
         navigation={
           <Route53SideNavigation

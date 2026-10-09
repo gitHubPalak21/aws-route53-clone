@@ -10,7 +10,6 @@ from sqlalchemy.orm import Session
 
 from app.db.types import utc_now
 from app.models import DNSRecord, HostedZone
-from app.models.enums import ZoneType
 from app.schemas.hosted_zone import (
     HostedZoneCreate, HostedZoneListQuery, HostedZoneListResponse,
     HostedZoneResponse, HostedZoneSortField, HostedZoneUpdate, SortOrder,
@@ -37,6 +36,10 @@ class HostedZoneIDUnavailable(Exception):
 
 
 class HostedZoneRecordConflict(Exception):
+    pass
+
+
+class HostedZoneTypeImmutable(Exception):
     pass
 
 
@@ -145,10 +148,9 @@ def update_hosted_zone(
 ) -> HostedZoneResponse:
     zone = owned_zone(db, owner_id, zone_id)
     changes = payload.model_dump(exclude_unset=True)
+    if "zone_type" in changes and changes["zone_type"] != zone.zone_type:
+        raise HostedZoneTypeImmutable
     merged = {field: getattr(zone, field) for field in EDITABLE_FIELDS}
-    if zone.zone_type == ZoneType.PRIVATE and changes.get("zone_type") == ZoneType.PUBLIC:
-        # Clear old private metadata; explicit conflicting input still fails validation.
-        merged.update(vpc_id=None, region=None)
     merged.update(changes)
     try:
         validated = HostedZoneCreate.model_validate(merged)

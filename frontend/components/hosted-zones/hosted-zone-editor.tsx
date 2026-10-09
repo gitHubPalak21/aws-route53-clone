@@ -15,7 +15,7 @@ function useSavedZone(verb: "created" | "updated") {
   const { setResource } = useHostedZoneContext();
   return (zone: HostedZone) => {
     setResource({ id: zone.id, name: zone.name });
-    success(`Hosted zone ${zone.name} was ${verb} successfully.`);
+    success(`Hosted zone ${zone.name} ${verb}.`);
     router.push(hostedZonePath(zone.id));
   };
 }

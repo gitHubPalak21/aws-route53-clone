@@ -1,17 +1,16 @@
 .toolbar {
   display: grid;
   grid-template-columns: minmax(180px, 1fr) 180px;
-  gap: 12px;
+  gap: var(--console-space-s);
   min-width: 0;
 }
 
 .name { overflow-wrap: anywhere; max-width: 18rem; }
 .values { overflow-wrap: anywhere; white-space: pre-wrap; max-width: 36rem; }
 
-.form { max-width: 800px; width: 100%; }
-.recordName { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; overflow-wrap: anywhere; }
+.recordName { display: flex; align-items: center; gap: var(--console-space-xs); flex-wrap: wrap; overflow-wrap: anywhere; }
 .nameInput { flex: 1 1 240px; min-width: 0; }
-.valueRow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: end; }
+.valueRow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--console-space-s); align-items: end; }
 .ttl { max-width: 200px; }
 
 @media (max-width: 600px) {
