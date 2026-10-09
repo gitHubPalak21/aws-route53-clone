@@ -27,7 +27,9 @@ python -m app.scripts.seed_demo_user
 python -m uvicorn app.main:app --reload
 ```
 
-Default API: [http://localhost:8000](http://localhost:8000), [Swagger](http://localhost:8000/docs), [ReDoc](http://localhost:8000/redoc). `/health` is a liveness check only. Startup does not create tables or seed users. Relative SQLite paths resolve under this directory.
+Default API: [http://localhost:8000](http://localhost:8000), [Swagger](http://localhost:8000/docs), [ReDoc](http://localhost:8000/redoc). `/health` is a liveness check only. Direct local Uvicorn startup does not create tables or seed users. Relative SQLite paths resolve under this directory.
+
+Railway uses `python -m app.scripts.start_production` instead: it validates HTTPS/cookie settings and mounted writable SQLite storage, runs Alembic and the idempotent seed, then launches one Uvicorn worker on the provider port. See the [deployment configuration](../README.md#deployment) for the persistent `/data` volume and public technical links.
 
 The seed creates `admin@route53.local` / `admin123` by default, hashes the password, and preserves an existing account on repeat runs. These are public demonstration credentials, configurable through `.env.example` settings before first seeding.
 

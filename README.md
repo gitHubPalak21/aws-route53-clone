@@ -8,6 +8,8 @@ This application recreates the Route 53 user experience and resource-management 
 
 **[Open the Route 53 console](https://aws-route53-clone-ecru.vercel.app)** — the single public entry point for evaluators.
 
+Source code: [gitHubPalak21/aws-route53-clone](https://github.com/gitHubPalak21/aws-route53-clone).
+
 Sign in with **`admin@route53.local` / `admin123`**. These are intentionally public demonstration credentials. The demo account is shared; use disposable resource names and remove your test resources when finished.
 
 The frontend runs on Vercel and sends same-origin `/api/*` requests through a server-side proxy to Railway. Hosted zones, records, and sessions persist in SQLite on an attached Railway volume. Public authentication, resource CRUD, and persistence after an actual Railway restart were verified on October 9, 2026; see the [deployment verification report](docs/task16-public-verification.md).
