@@ -2,11 +2,13 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
 from sqlalchemy import delete, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session as DBSession
 
 from app.core.config import Settings
 from app.core.security import (
     generate_session_token,
+    hash_password,
     hash_session_token,
     verify_dummy_password,
     verify_password,
@@ -20,6 +22,10 @@ class LoginResult:
     user: User
     raw_token: str = field(repr=False)
     expires_at: datetime
+
+
+class EmailAlreadyExists(Exception):
+    pass
 
 
 def cleanup_expired_sessions(db: DBSession, now: datetime | None = None) -> None:
@@ -39,6 +45,19 @@ def login(
     if not password_valid or not user.is_active:
         return None
 
+    try:
+        result = create_session_for_user(db, settings, user, previous_token)
+        db.commit()
+        return result
+    except Exception:
+        db.rollback()
+        raise
+
+
+def create_session_for_user(
+    db: DBSession, settings: Settings, user: User, previous_token: str | None = None,
+) -> LoginResult:
+    """Stage the normal session in the caller's transaction without committing."""
     now = utc_now()
     cleanup_expired_sessions(db, now)
     if previous_token:
@@ -47,8 +66,32 @@ def login(
     raw_token = generate_session_token()
     expires_at = now + timedelta(hours=settings.session_ttl_hours)
     db.add(Session(user=user, token_hash=hash_session_token(raw_token), expires_at=expires_at))
-    db.commit()
     return LoginResult(user=user, raw_token=raw_token, expires_at=expires_at)
+
+
+def register(
+    db: DBSession, settings: Settings, display_name: str, email: str, password: str,
+    previous_token: str | None = None,
+) -> LoginResult:
+    if db.scalar(select(User.id).where(User.email == email)) is not None:
+        raise EmailAlreadyExists
+    try:
+        user = User(email=email, display_name=display_name, password_hash=hash_password(password))
+        db.add(user)
+        # The unique constraint protects concurrent requests too. Flush before
+        # session creation so a failure rolls back both user and session together.
+        db.flush()
+        result = create_session_for_user(db, settings, user, previous_token)
+        db.commit()
+        return result
+    except IntegrityError:
+        db.rollback()
+        if db.scalar(select(User.id).where(User.email == email)) is not None:
+            raise EmailAlreadyExists from None
+        raise
+    except Exception:
+        db.rollback()
+        raise
 
 
 def resolve_session(db: DBSession, raw_token: str | None) -> Session | None:

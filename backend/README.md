@@ -31,7 +31,7 @@ Default API: [http://localhost:8000](http://localhost:8000), [Swagger](http://lo
 
 Railway uses `python -m app.scripts.start_production` instead: it validates HTTPS/cookie settings and mounted writable SQLite storage, runs Alembic and the idempotent seed, then launches one Uvicorn worker on the provider port. See the [deployment configuration](../README.md#deployment) for the persistent `/data` volume and public technical links.
 
-The seed creates `admin@route53.local` / `admin123` by default, hashes the password, and preserves an existing account on repeat runs. These are public demonstration credentials, configurable through `.env.example` settings before first seeding.
+The seed creates `admin@route53.local` / `admin123` by default, hashes the password, and preserves an existing account on repeat runs. These are public demonstration credentials, configurable through `.env.example` settings before first seeding. Users can alternatively register their own account using `POST /api/auth/register` (display_name, email, password). Registration returns the normal authenticated user and HttpOnly session cookie with status 201; duplicate normalized emails return 409. User and session creation commit together in the existing tables, so no new migration is needed.
 
 ## Regression Checks
 

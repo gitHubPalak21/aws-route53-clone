@@ -10,13 +10,13 @@ This application recreates the Route 53 user experience and resource-management 
 
 Source code: [gitHubPalak21/aws-route53-clone](https://github.com/gitHubPalak21/aws-route53-clone).
 
-Sign in with **`admin@route53.local` / `admin123`**. These are intentionally public demonstration credentials. The demo account is shared; use disposable resource names and remove your test resources when finished.
+Users may [create their own account](https://aws-route53-clone-ecru.vercel.app/signup) or sign in with the seeded evaluator account **`admin@route53.local` / `admin123`**. Registration creates a personal account and signs you in immediately; hosted zones and records are isolated by owner. The evaluator credentials are intentionally public and shared; use disposable resource names and remove your test resources when finished.
 
 The frontend runs on Vercel and sends same-origin `/api/*` requests through a server-side proxy to Railway. Hosted zones, records, and sessions persist in SQLite on an attached Railway volume. Public authentication, resource CRUD, and persistence after an actual Railway restart were verified on October 9, 2026; see the [deployment verification report](docs/task16-public-verification.md).
 
 ## Features
 
-- **Authentication:** demo sign-in, persistent HttpOnly sessions, session checking, protected routes, and sign-out.
+- **Authentication:** account registration, login, logout, persistent HttpOnly sessions, session checking, protected routes, and user ownership isolation.
 - **Hosted zones:** public/private CRUD, search, type filtering, sorting, pagination, AWS-style IDs, detail pages, and automatic mock NS/SOA records.
 - **DNS records:** CRUD, multiple values, search, type filtering, sorting, pagination, and protected system records. User types: **A, AAAA, CNAME, TXT, MX, NS, PTR, SRV, CAA**. SOA is system-generated only.
 - **Console:** dashboard with a real owner-scoped hosted-zone total, functional resource links, shared navigation and breadcrumbs, validation feedback, confirmation modals, and Flashbar success notifications.
@@ -157,7 +157,7 @@ Frontend routes compose feature components. A root authentication provider resol
 
 Backend routers handle HTTP inputs, dependencies, status codes, and response models. Services own queries, ownership checks, normalization, and write transactions. One engine, session factory, declarative base, and request-scoped session dependency support the application. Failed write transactions roll back; request sessions always close. Production startup runs Alembic and the idempotent demo seed before launching one Uvicorn worker. Local development can call FastAPI directly using the explicit localhost API base.
 
-The production browser receives a host-only, Secure, HttpOnly, SameSite=Lax session cookie through the Vercel proxy. Authentication tokens are not returned in JSON or stored in browser JavaScript storage. Railway retains an exact HTTPS frontend origin for credentialed CORS and trusted-Origin write protection.
+The production browser receives a host-only, Secure, HttpOnly, SameSite=Lax session cookie through the Vercel proxy. Authentication tokens are not returned in JSON or stored in browser JavaScript storage. Railway retains an exact HTTPS frontend origin for credentialed CORS and trusted-Origin write protection. Registration normalizes names/emails, requires an eight-character password, hashes it with the existing Argon2id mechanism, and atomically creates the user and normal session. The database's unique email constraint handles concurrent signup conflicts. This is the clone's local authentication system, not AWS IAM; email verification and password recovery are not implemented.
 
 ### Repository Structure
 
@@ -228,7 +228,7 @@ All resource routes require a valid session. Missing, cross-owner, and cross-zon
 
 | Area | Methods and paths |
 | --- | --- |
-| Authentication | `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout` |
+| Authentication | `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout` |
 | Hosted zones | `GET /api/hosted-zones`, `POST /api/hosted-zones` |
 | Hosted-zone resource | `GET`, `PATCH`, `DELETE /api/hosted-zones/{zone_id}` |
 | Records | `GET`, `POST /api/hosted-zones/{zone_id}/records` |
@@ -243,7 +243,7 @@ Both list responses have `items`, `page`, `page_size`, `total`, and `pages`. Com
 
 Search is trimmed, ASCII case-insensitive, parameter-bound, and treats SQL LIKE wildcards literally. PATCH merges supplied writable fields with existing state and validates the complete result; empty patches are rejected. IDs, ownership, timestamps, and `is_system` are not writable.
 
-In [Swagger](http://localhost:8000/docs), execute `POST /api/auth/login` with the demo credentials first. Subsequent same-origin requests carry the cookie automatically; the Authorize input cannot establish an HttpOnly cookie. The configured `SessionCookie` scheme documents the resource authentication contract.
+In [Swagger](http://localhost:8000/docs), execute `POST /api/auth/register` to create an account or `POST /api/auth/login` with existing credentials first. Subsequent same-origin requests carry the cookie automatically; the Authorize input cannot establish an HttpOnly cookie. The configured `SessionCookie` scheme documents the resource authentication contract.
 
 ## Authentication and Security
 
@@ -291,7 +291,8 @@ Cloudscape closely follows AWS console layout and interaction patterns through T
 
 | Frontend route | Purpose |
 | --- | --- |
-| `/login` | Demo sign-in outside the service shell |
+| `/login` | Sign in outside the service shell; link to account registration |
+| `/signup` | Create an account and automatically sign in |
 | `/route53` | Dashboard; efficient hosted-zone count using `page_size=1` |
 | `/route53/hosted-zones` | Hosted-zone collection |
 | `/route53/hosted-zones/create` | Create zone |
@@ -338,7 +339,7 @@ Task 16 verification passed **398 backend tests**, **15 frontend tests**, lint, 
 
 ## Evaluator Walkthrough
 
-1. Sign in with the demo credentials and open Hosted zones from the dashboard.
+1. Create your own account or sign in with the seeded evaluator credentials, then open Hosted zones from the dashboard.
 2. Create `example.com` as public; inspect its generated NS/SOA and record count.
 3. Create a `www` A record with `192.0.2.10`; search/filter, edit, and confirm-delete it.
 4. Select a system NS/SOA record and observe disabled mutation actions.

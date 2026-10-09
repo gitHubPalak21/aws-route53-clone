@@ -4,11 +4,36 @@ from app.dependencies.auth import (
     AuthSettings, CurrentSession, CurrentUser, Database,
     clear_session_cookie, require_trusted_origin,
 )
-from app.schemas.auth import AuthErrorResponse, AuthUserResponse, LoginRequest, LoginResponse, LogoutResponse
+from app.schemas.auth import AuthErrorResponse, AuthUserResponse, LoginRequest, LoginResponse, LogoutResponse, RegisterRequest
 from app.services import auth_service
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 unauthorized = {401: {"model": AuthErrorResponse}}
+
+
+def authenticated_response(response: Response, settings: AuthSettings, result: auth_service.LoginResult) -> LoginResponse:
+    response.set_cookie(
+        settings.session_cookie_name, result.raw_token,
+        max_age=settings.session_ttl_hours * 3600, expires=result.expires_at,
+        path="/", httponly=True, secure=bool(settings.session_cookie_secure), samesite="lax",
+    )
+    response.headers["Cache-Control"] = "no-store"
+    return LoginResponse(user=AuthUserResponse.model_validate(result.user))
+
+
+@router.post("/register", status_code=201, response_model=LoginResponse,
+             summary="Create an account and sign in", responses={409: {"model": AuthErrorResponse}},
+             dependencies=[Depends(require_trusted_origin)])
+def register(payload: RegisterRequest, request: Request, response: Response, db: Database, settings: AuthSettings) -> LoginResponse:
+    try:
+        result = auth_service.register(
+            db, settings, payload.display_name, payload.email, payload.password.get_secret_value(),
+            request.cookies.get(settings.session_cookie_name),
+        )
+    except auth_service.EmailAlreadyExists:
+        raise HTTPException(status_code=409, detail="An account with this email already exists.",
+                            headers={"Cache-Control": "no-store"}) from None
+    return authenticated_response(response, settings, result)
 
 
 @router.post("/login", response_model=LoginResponse, responses=unauthorized,
@@ -20,13 +45,7 @@ def login(payload: LoginRequest, request: Request, response: Response, db: Datab
     )
     if result is None:
         raise HTTPException(status_code=401, detail="Invalid email or password", headers={"Cache-Control": "no-store"})
-    response.set_cookie(
-        settings.session_cookie_name, result.raw_token,
-        max_age=settings.session_ttl_hours * 3600, expires=result.expires_at,
-        path="/", httponly=True, secure=bool(settings.session_cookie_secure), samesite="lax",
-    )
-    response.headers["Cache-Control"] = "no-store"
-    return LoginResponse(user=AuthUserResponse.model_validate(result.user))
+    return authenticated_response(response, settings, result)
 
 
 @router.get("/me", response_model=LoginResponse, responses=unauthorized)

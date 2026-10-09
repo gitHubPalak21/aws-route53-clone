@@ -48,7 +48,7 @@ async def test_docs_and_openapi(client: httpx.AsyncClient) -> None:
     schema = (await client.get("/openapi.json")).json()
     assert schema["info"]["title"] == "Route53 Clone API"
     assert set(schema["paths"]) == {
-        "/", "/health", "/api/auth/login", "/api/auth/me", "/api/auth/logout",
+        "/", "/health", "/api/auth/register", "/api/auth/login", "/api/auth/me", "/api/auth/logout",
         "/api/hosted-zones", "/api/hosted-zones/{zone_id}",
         "/api/hosted-zones/{zone_id}/records", "/api/hosted-zones/{zone_id}/records/{record_id}",
     }

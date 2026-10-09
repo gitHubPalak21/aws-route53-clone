@@ -18,7 +18,7 @@ def create_app() -> FastAPI:
         description="Session-authenticated hosted-zone and DNS-record management for an AWS Route 53 workflow clone. No real DNS hosting or AWS provisioning.",
         version="0.1.0",
         openapi_tags=[{"name": "Hosted Zones", "description": (
-            "Owner-scoped hosted zone management. Sign in through /api/auth/login first; "
+            "Owner-scoped hosted zone management. Sign in through /api/auth/login or /api/auth/register first; "
             "same-origin Swagger requests use the HttpOnly session cookie. This mock API does not provision AWS or DNS."
         )}, {"name": "DNS Records", "description": (
             "Owner-scoped mock DNS storage with type validation, SQL search/filter/sort/pagination, "
@@ -38,7 +38,7 @@ def create_app() -> FastAPI:
     # authenticating its stored hash, expiry and user status on every operation.
     cookie_docs = Depends(APIKeyCookie(
         name=settings.session_cookie_name, scheme_name="SessionCookie", auto_error=False,
-        description="HttpOnly cookie established by POST /api/auth/login; log in before trying these endpoints",
+        description="HttpOnly cookie established by POST /api/auth/login or /api/auth/register; sign in before trying these endpoints",
     ))
     application.include_router(hosted_zones_router, dependencies=[cookie_docs])
     application.include_router(dns_records_router, dependencies=[cookie_docs])

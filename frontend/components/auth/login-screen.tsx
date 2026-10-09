@@ -15,6 +15,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { ApiError } from "@/lib/api/client";
 import { safeReturnTo } from "@/lib/auth/redirects";
 import { AuthLoading } from "./auth-status";
+import { AuthPageShell } from "./auth-page-shell";
 
 function signInError(error: unknown): string {
   if (error instanceof ApiError && error.status === 401) return "Invalid email or password.";
@@ -80,12 +81,7 @@ export function LoginScreen() {
   if (status === "checking" || status === "authenticated") return <AuthLoading />;
 
   return (
-    <div className="login-page">
-      <header className="login-header">
-        <span className="login-brand">AWS</span>
-        <span className="login-product">Route 53 Clone</span>
-      </header>
-      <main className="login-main">
+    <AuthPageShell>
         <SpaceBetween size="l">
           <form onSubmit={submit} noValidate>
             <Container>
@@ -117,12 +113,14 @@ export function LoginScreen() {
               </Form>
             </Container>
           </form>
-          <Box color="text-body-secondary" fontSize="body-s">
-            <Box variant="strong" color="inherit">Demo environment</Box>
-            <div>Use the demo credentials provided in the project README.</div>
-          </Box>
+          <SpaceBetween size="s">
+            <Box variant="strong">New to Route 53 Clone?</Box>
+            <Box color="text-body-secondary">Create an account to start managing hosted zones.</Box>
+            <Button href="/signup" onFollow={(event) => { event.preventDefault(); router.push("/signup"); }} fullWidth>
+              Create account
+            </Button>
+          </SpaceBetween>
         </SpaceBetween>
-      </main>
-    </div>
+    </AuthPageShell>
   );
 }

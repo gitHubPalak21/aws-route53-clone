@@ -12,3 +12,7 @@ export interface LoginCredentials {
   email: string;
   password: string;
 }
+
+export interface RegistrationCredentials extends LoginCredentials {
+  display_name: string;
+}

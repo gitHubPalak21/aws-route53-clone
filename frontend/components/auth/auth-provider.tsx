@@ -3,7 +3,7 @@
 import { createContext, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import * as authApi from "@/lib/api/auth";
 import { ApiError } from "@/lib/api/client";
-import type { AuthUser, LoginCredentials } from "@/types/auth";
+import type { AuthUser, LoginCredentials, RegistrationCredentials } from "@/types/auth";
 
 type AuthState =
   | { status: "checking"; user: null; error: null; signedOut: false }
@@ -16,6 +16,7 @@ type AuthContextValue = AuthState & {
   isAuthenticated: boolean;
   isSigningOut: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
+  register: (credentials: RegistrationCredentials) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 };
@@ -107,12 +108,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const register = useCallback(async (credentials: RegistrationCredentials) => {
+    const currentVersion = ++version.current;
+    const user = await authApi.register(credentials);
+    if (mounted.current && currentVersion === version.current) {
+      setState({ status: "authenticated", user, error: null, signedOut: false });
+    }
+  }, []);
+
   const value = useMemo<AuthContextValue>(() => ({
     ...state,
     isLoading: state.status === "checking",
     isAuthenticated: state.status === "authenticated",
-    isSigningOut, login, logout, refreshUser,
-  }), [state, isSigningOut, login, logout, refreshUser]);
+    isSigningOut, login, register, logout, refreshUser,
+  }), [state, isSigningOut, login, register, logout, refreshUser]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -1,5 +1,5 @@
 import { ApiError, apiRequest } from "@/lib/api/client";
-import type { AuthResponse, AuthUser, LoginCredentials } from "@/types/auth";
+import type { AuthResponse, AuthUser, LoginCredentials, RegistrationCredentials } from "@/types/auth";
 
 function publicUser(response: AuthResponse | undefined): AuthUser {
   if (!response?.user) {
@@ -17,6 +17,12 @@ export async function login(credentials: LoginCredentials): Promise<void> {
 
 export async function getCurrentUser(): Promise<AuthUser> {
   return publicUser(await apiRequest<AuthResponse>("/api/auth/me", { cache: "no-store" }));
+}
+
+export async function register(credentials: RegistrationCredentials): Promise<AuthUser> {
+  return publicUser(await apiRequest<AuthResponse>("/api/auth/register", {
+    method: "POST", json: { display_name: credentials.display_name, email: credentials.email, password: credentials.password },
+  }));
 }
 
 export async function logout(): Promise<void> {
