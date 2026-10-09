@@ -1,0 +1,28 @@
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 176px;
+  gap: 12px;
+  align-items: start;
+  min-width: 0;
+}
+
+.description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.zoneId {
+  overflow-wrap: anywhere;
+}
+
+.form {
+  max-width: 800px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .toolbar { grid-template-columns: minmax(0, 1fr); }
+}

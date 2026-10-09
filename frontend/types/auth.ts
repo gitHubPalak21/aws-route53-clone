@@ -1,0 +1,14 @@
+export interface AuthUser {
+  id: number;
+  email: string;
+  display_name: string;
+}
+
+export interface AuthResponse {
+  user: AuthUser;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
