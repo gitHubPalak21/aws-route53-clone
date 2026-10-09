@@ -30,7 +30,7 @@ export function HostedZoneDetails({ zoneId }: { zoneId: string }) {
       <Button onClick={() => setDeleteVisible(true)}>Delete</Button>
     </SpaceBetween>}>{zone.name}</Header>}>
     <SpaceBetween size="l"><Container header={<Header variant="h2">Hosted zone details</Header>}>
-      <KeyValuePairs columns={zone.zone_type === "PUBLIC" ? 4 : 3} items={[
+      <KeyValuePairs columns={zone.zone_type === "PUBLIC" ? 4 : 3} minColumnWidth={240} items={[
         { label: "Hosted zone ID", value: zone.id },
         { label: "Type", value: `${HOSTED_ZONE_TYPE_LABELS[zone.zone_type]} hosted zone` },
         { label: "Description", value: zone.comment || "—" },
