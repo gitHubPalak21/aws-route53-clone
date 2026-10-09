@@ -28,7 +28,8 @@ These are actual application captures. Their resource data illustrates workflows
 
 | Page | Screenshot |
 | --- | --- |
-| Sign in | [View](docs/images/task13-login-1440.jpg) |
+| Sign in | [View](docs/images/login-registration-production.jpg) |
+| Create account | [View](docs/images/signup-production.jpg) |
 | Hosted zones | [View](docs/images/task13-zones-1440.jpg) |
 | Create hosted zone | [View](docs/images/task13-zone-create-1440.jpg) |
 | Hosted zone and records | [View](docs/images/task13-zone-detail-1440.jpg) |
@@ -334,6 +335,8 @@ python -m alembic check
 ```
 
 Backend tests migrate isolated temporary SQLite databases, never the developer database. They cover authentication, owner isolation, CRUD, private/public transitions, all DNS types, normalization, search/filter/sort/pagination, system protection, cascades, uniqueness races, rollback, persistence, and migration/model parity. Node tests cover DNS validation, API behavior/error feedback, hosted-zone payloads, and safe authentication destinations without another testing framework.
+
+The account-registration enhancement passed **419 backend tests**, **20 frontend tests**, lint, typecheck, build, and Alembic parity checks. Public signup, automatic login, refresh, logout/re-login, new-user resource creation, demo login, and two-user isolation passed; see [registration verification](docs/registration-verification.md).
 
 Task 16 verification passed **398 backend tests**, **15 frontend tests**, lint, typecheck, and production build. Public browser CRUD, authentication, API documentation, cookie attributes, system-record protection, and persistence after an actual Railway restart also passed; see [public deployment verification](docs/task16-public-verification.md). Earlier clean-install, migration, and engineering-audit checks are retained in the [Task 14–15 report](docs/task14-15-verification.md). Browser testing is documented manual verification, not an automated browser test suite.
 
