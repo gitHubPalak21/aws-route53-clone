@@ -28,16 +28,16 @@ These are actual application captures. Their resource data illustrates workflows
 
 | Page | Screenshot |
 | --- | --- |
-| Sign in | [View](docs/images/fidelity/after-login-1440.jpg) |
-| Create account | [View](docs/images/fidelity/after-signup-1440.jpg) |
-| Hosted zones | [View](docs/images/fidelity/after-zones-1440.jpg) |
-| Create hosted zone | [View](docs/images/fidelity/after-zone-create-1440.jpg) |
-| Hosted zone and records | [View](docs/images/fidelity/after-zone-detail-1440.jpg) |
-| Create DNS record | [View](docs/images/fidelity/after-record-create-1440.jpg) |
+| Sign in | [View](docs/images/dark-fidelity/after-login-1440.jpg) |
+| Create account | [View](docs/images/dark-fidelity/after-signup-1440.jpg) |
+| Hosted zones | [View](docs/images/dark-fidelity/after-zones-1440.jpg) |
+| Create hosted zone | [View](docs/images/dark-fidelity/after-zone-create-1440.jpg) |
+| Hosted zone and records | [View](docs/images/dark-fidelity/after-zone-detail-1440.jpg) |
+| Create DNS record | [View](docs/images/dark-fidelity/after-record-create-1440.jpg) |
 
-![Route 53 dashboard](docs/images/fidelity/after-dashboard-1440.jpg)
+![Route 53 dashboard](docs/images/dark-fidelity/after-dashboard-1440.jpg)
 
-The [final UI fidelity verification](docs/ui-fidelity-verification.md) includes before/after captures of all 13 major pages at three desktop viewports, regression results, public deployment checks, and documented differences from AWS.
+The [dark-console verification](docs/dark-console-verification.md) documents the October 10 dark-mode redesign, 13 production pages checked at three desktop viewports, regression results, and remaining differences from AWS. The [previous light-mode audit](docs/ui-fidelity-verification.md) is retained as historical evidence.
 
 ## Tech Stack
 
@@ -290,7 +290,7 @@ User records have TTL 1–2147483647 and 1–100 values, each at most 4096 chara
 
 ## UI / UX and Design Decisions
 
-Cloudscape closely follows AWS console layout and interaction patterns through TopNavigation, SideNavigation, AppLayout, breadcrumbs, dense tables, left-aligned forms, resource metadata, confirmation modals, and Flashbar notifications. Create/edit forms are reused, actions prevent duplicate submissions, and errors preserve entries. Success messages survive client navigation, can be dismissed, expire after 30 seconds, and are bounded to four visible messages.
+Cloudscape dark mode and compact density apply globally, including authentication. TopNavigation's supported custom-content slot provides the wide console search and utility controls; AppLayoutToolbar provides the secondary service strip, navigation, breadcrumbs, and help drawer. Native tables, forms, metadata, confirmation modals, and Flashbars share the dark palette. Supported theming sets primary actions to AWS orange while preserving native control shapes and focus states. A token-based footer remains visible without covering scrollable content. Create/edit forms are reused, actions prevent duplicate submissions, and errors preserve entries. Success messages survive client navigation, can be dismissed, expire after 30 seconds, and are bounded to four visible messages.
 
 | Frontend route | Purpose |
 | --- | --- |
@@ -360,7 +360,7 @@ A Cloudscape development warning about its internal mobile-navigation button ove
 
 ## Future Improvements
 
-Potential later work: BIND import/export, JSON export, bulk operations, dark mode, keyboard shortcuts, and additional routing policies. These bonuses are **not implemented**.
+Potential later work: BIND import/export, JSON export, bulk operations, keyboard shortcuts, and additional routing policies. These bonuses are **not implemented**.
 
 ## Deployment
 

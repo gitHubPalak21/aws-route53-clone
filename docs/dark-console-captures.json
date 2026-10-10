@@ -1,0 +1,307 @@
+[
+  {
+    "file": "after-dashboard-1280.jpg",
+    "bitmap_width": 1280,
+    "bitmap_height": 720
+  },
+  {
+    "file": "after-dashboard-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-dashboard-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-dashboard-1920.jpg",
+    "bitmap_width": 1920,
+    "bitmap_height": 1061
+  },
+  {
+    "file": "after-delete-record-modal-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-delete-zone-modal-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-empty-zones-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-health-checks-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-health-checks-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-health-checks-1920.jpg",
+    "bitmap_width": 1920,
+    "bitmap_height": 1061
+  },
+  {
+    "file": "after-help-panel-1280.jpg",
+    "bitmap_width": 1280,
+    "bitmap_height": 720
+  },
+  {
+    "file": "after-login-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-login-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-login-1920.jpg",
+    "bitmap_width": 1728,
+    "bitmap_height": 1080
+  },
+  {
+    "file": "after-login-error-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-no-matches-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-not-found-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-private-details-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-private-form-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-profiles-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-profiles-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-profiles-1920.jpg",
+    "bitmap_width": 1920,
+    "bitmap_height": 1061
+  },
+  {
+    "file": "after-record-create-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-record-create-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-record-create-1920.jpg",
+    "bitmap_width": 1920,
+    "bitmap_height": 1061
+  },
+  {
+    "file": "after-record-edit-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-record-edit-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-record-edit-1920.jpg",
+    "bitmap_width": 1920,
+    "bitmap_height": 1061
+  },
+  {
+    "file": "after-record-pagination-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-resolver-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-resolver-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-resolver-1920.jpg",
+    "bitmap_width": 1920,
+    "bitmap_height": 1061
+  },
+  {
+    "file": "after-selected-row-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-signup-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-signup-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 809
+  },
+  {
+    "file": "after-signup-1920.jpg",
+    "bitmap_width": 1708,
+    "bitmap_height": 960
+  },
+  {
+    "file": "after-success-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-traffic-policies-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-traffic-policies-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-traffic-policies-1920.jpg",
+    "bitmap_width": 1920,
+    "bitmap_height": 1061
+  },
+  {
+    "file": "after-validation-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-zone-create-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-zone-create-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-zone-create-1920.jpg",
+    "bitmap_width": 1920,
+    "bitmap_height": 1061
+  },
+  {
+    "file": "after-zone-detail-1366.jpg",
+    "bitmap_width": 1351,
+    "bitmap_height": 759
+  },
+  {
+    "file": "after-zone-detail-1440.jpg",
+    "bitmap_width": 1425,
+    "bitmap_height": 891
+  },
+  {
+    "file": "after-zone-detail-1920.jpg",
+    "bitmap_width": 1905,
+    "bitmap_height": 1053
+  },
+  {
+    "file": "after-zone-edit-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-zone-edit-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-zone-edit-1920.jpg",
+    "bitmap_width": 1920,
+    "bitmap_height": 1061
+  },
+  {
+    "file": "after-zones-1366.jpg",
+    "bitmap_width": 1366,
+    "bitmap_height": 768
+  },
+  {
+    "file": "after-zones-1440.jpg",
+    "bitmap_width": 1440,
+    "bitmap_height": 900
+  },
+  {
+    "file": "after-zones-1920.jpg",
+    "bitmap_width": 1920,
+    "bitmap_height": 1061
+  },
+  {
+    "file": "after-zones-375.jpg",
+    "bitmap_width": 360,
+    "bitmap_height": 779
+  },
+  {
+    "file": "before-dashboard-default.jpg",
+    "bitmap_width": 1265,
+    "bitmap_height": 712
+  },
+  {
+    "file": "before-health-checks-default.jpg",
+    "bitmap_width": 1280,
+    "bitmap_height": 720
+  },
+  {
+    "file": "before-record-create-default.jpg",
+    "bitmap_width": 1265,
+    "bitmap_height": 712
+  },
+  {
+    "file": "before-zone-create-default.jpg",
+    "bitmap_width": 1280,
+    "bitmap_height": 720
+  },
+  {
+    "file": "before-zone-detail-default.jpg",
+    "bitmap_width": 1265,
+    "bitmap_height": 712
+  },
+  {
+    "file": "before-zones-default.jpg",
+    "bitmap_width": 1265,
+    "bitmap_height": 712
+  },
+  {
+    "file": "local-flashbar-variants.jpg",
+    "bitmap_width": 1280,
+    "bitmap_height": 720
+  }
+]
