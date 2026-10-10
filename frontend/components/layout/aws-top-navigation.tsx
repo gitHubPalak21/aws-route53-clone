@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { ROUTE53_PAGES } from "@/lib/constants/navigation";
+import { AwsLogo } from "@/components/layout/aws-logo";
 
 export function AwsTopNavigation() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export function AwsTopNavigation() {
       <nav className="console-topbar" aria-label="AWS console navigation">
         <Button variant="inline-link" href={homeHref} onFollow={(event) => {
           event.preventDefault(); router.push(homeHref);
-        }}><span className="console-identity">AWS</span></Button>
+        }}><AwsLogo /></Button>
         <span className="console-service-mark" title="Route 53"><Icon name="globe" ariaLabel="Route 53 service" /></span>
         <ButtonDropdown variant="icon" iconName="grid-view" ariaLabel="Services"
           items={[{ id: "route53", text: "Route 53", href: homeHref }]}

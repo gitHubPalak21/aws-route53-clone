@@ -20,7 +20,7 @@ body {
   box-sizing: border-box;
 }
 
-.console-identity { color: var(--console-text); font-size: 20px; font-weight: 700; white-space: nowrap; }
+.console-identity { display: block; flex-shrink: 0; }
 .console-topbar > :not(.console-search-input) { flex-shrink: 0; }
 .console-topbar-utilities { margin-inline-start: auto; display: flex; align-items: center; gap: var(--console-space-s); white-space: nowrap; }
 .console-topbar-utilities > * { border-inline-start: 1px solid var(--console-border); padding-inline-start: var(--console-space-s); }
