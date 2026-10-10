@@ -104,7 +104,7 @@ body {
 }
 
 @media (max-width: 480px) {
-  .console-topbar { gap: var(--console-space-xs); padding-inline: var(--console-space-s); }
+  .console-topbar { gap: var(--console-space-xs); padding-inline: var(--console-space-xs); }
   .console-search-input { display: none; }
   .console-topbar-docs { display: none; }
   .console-topbar-utilities > * { padding-inline-start: var(--console-space-xs); }
