@@ -33,7 +33,7 @@ const columns: TableProps.ColumnDefinition<HostedZone>[] = [
     cell: (zone) => HOSTED_ZONE_TYPE_LABELS[zone.zone_type] },
   { id: "record_count", header: "Record count", minWidth: 125, cell: (zone) => zone.record_count },
   { id: "comment", header: "Description", minWidth: 185,
-    cell: (zone) => <span className={styles.description} title={zone.comment || undefined}>{zone.comment || "—"}</span> },
+    cell: (zone) => <Box variant="span" color="text-body-secondary"><span className={styles.description} title={zone.comment || undefined}>{zone.comment || "—"}</span></Box> },
   { id: "id", header: "Hosted zone ID", sortingField: "id", minWidth: 210,
     cell: (zone) => <Box variant="span" color="text-body-secondary"><span className={styles.zoneId}>{zone.id}</span></Box> },
 ];

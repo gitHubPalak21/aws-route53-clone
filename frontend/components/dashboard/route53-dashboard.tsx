@@ -10,7 +10,6 @@ import Header from "@cloudscape-design/components/header";
 import Link from "@cloudscape-design/components/link";
 import SpaceBetween from "@cloudscape-design/components/space-between";
 import Spinner from "@cloudscape-design/components/spinner";
-import StatusIndicator from "@cloudscape-design/components/status-indicator";
 import { useRouter } from "next/navigation";
 import { useHostedZones } from "@/hooks/use-hosted-zones";
 import { ROUTE53_PAGES } from "@/lib/constants/navigation";
@@ -52,7 +51,6 @@ export function Route53Dashboard() {
       <ColumnLayout columns={2}>
         {services.map(({ page, title }) => <Container key={page.href} header={<Header variant="h2">{title}</Header>}>
           <SpaceBetween size="m">
-            <StatusIndicator type="not-started">Outside demonstration scope</StatusIndicator>
             <Box>{page.description}</Box>
             <Link href={page.href} onFollow={(event) => { event.preventDefault(); router.push(page.href); }}>Open {page.title.toLowerCase()}</Link>
           </SpaceBetween>

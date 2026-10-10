@@ -1,6 +1,7 @@
 body {
   margin: 0;
   background: var(--console-background);
+  color: var(--console-text);
 }
 
 .console-header {
@@ -9,18 +10,62 @@ body {
   z-index: 1000;
 }
 
-/* TopNavigation supplies the responsive header; this composes its search slot. */
-.console-search {
+/* TopNavigation's supported children slot avoids its narrow, centered search slot. */
+.console-topbar {
   display: flex;
   align-items: center;
-  gap: var(--console-space-m);
-  width: 100%;
+  gap: var(--console-space-s);
+  min-height: 52px;
+  padding-inline: var(--console-space-m);
+  box-sizing: border-box;
 }
+
+.console-identity { color: var(--console-text); font-size: 20px; font-weight: 700; white-space: nowrap; }
+.console-topbar > :not(.console-search-input) { flex-shrink: 0; }
+.console-topbar-utilities { margin-inline-start: auto; display: flex; align-items: center; gap: var(--console-space-s); white-space: nowrap; }
+.console-topbar-utilities > * { border-inline-start: 1px solid var(--console-border); padding-inline-start: var(--console-space-s); }
+.console-account-name { display: inline-block; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
 
 .console-search-input {
   flex: 1;
   min-width: 0;
-  max-width: 640px;
+  max-width: 680px;
+}
+
+.console-service-mark {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--console-space-m);
+  border-inline-start: 1px solid var(--console-border);
+}
+
+/* AppLayoutToolbar reserves this footer's measured height via footerSelector. */
+.console-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--console-space-m);
+  padding: var(--console-space-xs) var(--console-space-m);
+  background: var(--console-bar-background);
+  color: var(--console-text-secondary);
+  border-top: 1px solid var(--console-border);
+  font-size: var(--console-font-small);
+}
+
+.console-footer-tools,
+.console-footer-legal,
+.console-footer-tool {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--console-space-m);
+}
+
+.console-footer-tool {
+  gap: var(--console-space-xs);
 }
 
 /* Only authentication composition; Cloudscape owns controls and focus styles. */
@@ -32,15 +77,37 @@ body {
 
 .login-page {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .login-main {
   max-width: 432px;
   margin: 72px auto;
   padding: 0 var(--console-space-xl);
+  width: calc(100% - 2 * var(--console-space-xl));
+  flex: 1;
+}
+
+@media (max-width: 1366px) {
+  .console-footer-optional { display: none; }
+}
+
+@media (max-width: 900px) {
+  .console-footer { flex-wrap: wrap; }
+  .console-service-mark { display: none; }
+  .console-search-input { width: 100%; }
+  .console-footer-legal > span { display: none; }
+  .console-topbar-optional { display: none; }
+  .console-topbar-utilities { gap: var(--console-space-xs); }
+  .console-account-name { max-width: 96px; }
 }
 
 @media (max-width: 480px) {
+  .console-topbar { gap: var(--console-space-xs); padding-inline: var(--console-space-s); }
+  .console-search-input { display: none; }
+  .console-topbar-docs { display: none; }
+  .console-topbar-utilities > * { padding-inline-start: var(--console-space-xs); }
   .login-main { margin-top: 40px; }
   .auth-status { margin-top: 64px; }
 }

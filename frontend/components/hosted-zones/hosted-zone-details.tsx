@@ -26,8 +26,8 @@ export function HostedZoneDetails({ zoneId }: { zoneId: string }) {
   if (!zone) return <HostedZoneResourceState loading={loading} missing={error === "missing"} onRetry={refetch} />;
   return <ContentLayout disableOverlap header={<Header variant="h1" actions={
     <SpaceBetween direction="horizontal" size="xs">
-      <Button onClick={() => router.push(`${hostedZonePath(zone.id)}/edit`)}>Edit</Button>
       <Button onClick={() => setDeleteVisible(true)}>Delete</Button>
+      <Button onClick={() => router.push(`${hostedZonePath(zone.id)}/edit`)}>Edit hosted zone</Button>
     </SpaceBetween>}>{zone.name}</Header>}>
     <SpaceBetween size="l"><Container header={<Header variant="h2">Hosted zone details</Header>}>
       <KeyValuePairs columns={zone.zone_type === "PUBLIC" ? 4 : 3} minColumnWidth={240} items={[
